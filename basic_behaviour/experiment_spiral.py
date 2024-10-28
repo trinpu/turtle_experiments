@@ -17,3 +17,7 @@ def compute_edge_remeinder(edge_size, EDGE_CHANGE):
     return edge_remainder
 
 assert compute_edge_remeinder(edge_size, EDGE_CHANGE) == sum([10, 15, 20, 25, 30, 35, 40, 45]), f"The edge remeinder is {edge_remainder}"# 210 [0, 5, 10, 15, 20, 25, 30, 35]
+
+
+## question, If a trutle travels the same distance and completes the same rotation, would it end up in the same place if the distance and rotation is randomized in each step??
+## basically, the question can be boiled down. Would a turtle end up in the same position and heading, even if we ranomize the movement?

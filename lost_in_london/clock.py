@@ -1,19 +1,11 @@
 import turtle
 
-background_color = "#090c1f"
-pen_color = "#BFEDFF"
-fill_color = "#6490CE"
 
-canvas = turtle.Screen()
-canvas.bgcolor(background_color)
-
-def create_clock(n_hour_marks, hour_hand_size, hour_mark_heading):
+def create_clock(n_hour_marks, hour_hand_size, hour_mark_heading, turtle_shape_size):
     """Creates a clock of hour marks, return a list with clock wise turtles positioned as the hour marks"""
 
     hour_mark_angle = 360 / n_hour_marks
     hour_marks = []
-
-    turtle_shape_size = 1
 
     for mark in range(n_hour_marks):
         a_turtle = turtle.Turtle()
@@ -29,10 +21,19 @@ def create_clock(n_hour_marks, hour_hand_size, hour_mark_heading):
 
     return hour_marks
 
+background_color = "#090c1f"
+pen_color = "#BFEDFF"
+fill_color = "#6490CE"
+
+canvas = turtle.Screen()
+canvas.bgcolor(background_color)
+
 n_hour_marks = 12
 hour_hand_size = 200
 hour_mark_heading = 90
-clock = create_clock(n_hour_marks, hour_hand_size, hour_mark_heading)
+turtle_shape_size = 1
+
+clock = create_clock(n_hour_marks, hour_hand_size, hour_mark_heading, turtle_shape_size)
 
 canvas.mainloop()
 

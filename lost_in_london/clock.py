@@ -17,6 +17,7 @@ hour_marks = []
 
 for mark in range(n_hour_marks):
     a_turtle = turtle.Turtle()
+    a_turtle.speed(6)
     a_turtle.shape('circle')
     a_turtle.setheading(hour_mark_heading)
     a_turtle.shapesize(1)

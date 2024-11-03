@@ -78,24 +78,27 @@ clock = create_clock(n_hour_marks, turtle_shape_size, pen_color, background_colo
 
 ### Less hacky solution
 
-# PROBLEMS:
-# 1. Sequential vs. Simultaneous paining
-# 2. Transparency of fillcolor - train_colors = [(100, 144, 206, 1),(100, 144, 206, 0.75),(100, 144, 206, 0.5)]
+# note: with time_lag at 0, I create the stepping flag behaviour I wanted
+# next feature: draw ("scia"), it could be approached as:
+# - a longer train with more colors and transparency, max # colors < # hour marks
 
 train_colors = ["red","white","green"]
 delete_backward_count = len(train_colors) + 1
 moving_flag_index = [0, 11, 10] # will find a more elegant solution
-time_lag = 0.1
+time_lag = 0 # controls spreading behaviour
+delete_lag = 0.2
 
 for count in range(20):
     if count == 0:
         start_counting_orb(clock, moving_flag_index[0], 1, pen_color, train_colors[0], delete_color, 1, delete_backward_count, time_lag)
+        time.sleep(delete_lag)
         clock[moving_flag_index[0 % 12]].fillcolor(delete_color)
     elif count == 1:
-        start_counting_orb(clock, moving_flag_index[0], 1, pen_color, train_colors[0], delete_color, 1, delete_backward_count, time_lag)
         start_counting_orb(clock, moving_flag_index[1], 1, pen_color, train_colors[1], delete_color, 1, delete_backward_count, time_lag)
-        clock[moving_flag_index[1] % 12].fillcolor(delete_color)
+        start_counting_orb(clock, moving_flag_index[0], 1, pen_color, train_colors[0], delete_color, 1, delete_backward_count, time_lag)
+        time.sleep(delete_lag)
         clock[moving_flag_index[0] % 12].fillcolor(delete_color)
+        clock[moving_flag_index[1] % 12].fillcolor(delete_color)
     else:
         start_counting_orb(clock, moving_flag_index[0], 1, pen_color, train_colors[0], delete_color, 1, delete_backward_count, time_lag)
         start_counting_orb(clock, moving_flag_index[1], 1, pen_color, train_colors[1], delete_color, 1, delete_backward_count, time_lag)
@@ -103,6 +106,7 @@ for count in range(20):
 
         # this delete behavour is so fast that it seems simultaneous!
         # same logic could be applied to coloring behvavour
+        time.sleep(delete_lag)
         clock[moving_flag_index[2] % 12].fillcolor(delete_color)
         clock[moving_flag_index[1] % 12].fillcolor(delete_color)
         clock[moving_flag_index[0] % 12].fillcolor(delete_color)
@@ -110,6 +114,7 @@ for count in range(20):
     moving_flag_index[0] += 1
     moving_flag_index[1] += 1
     moving_flag_index[2] += 1
+
     
 
 canvas.mainloop()

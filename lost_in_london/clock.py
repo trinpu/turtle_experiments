@@ -47,6 +47,13 @@ def start_counting_orb(clock, starting_mark, n_counts, pen_color, fill_color, de
     else:
         return colored_mark_index + 1
 
+## core behaviours
+def bouncing_clock():
+    """A colored hour mark counting forward and backwards"""
+    colored_mark = start_counting_orb(clock, starting_mark, 12, pen_color, fill_color, delete_color, 1, 1, 0.3)
+    colored_mark = start_counting_orb(clock, colored_mark, 12, pen_color, fill_color, delete_color, 1, 1, 0.3, False)
+    colored_mark = start_counting_orb(clock, colored_mark, 12, pen_color, fill_color, delete_color, 1, 1, 0.3)
+
 
 
 background_color = "#090c1f"
@@ -65,25 +72,40 @@ turtle_shape_size = 1
 starting_mark = 12
 
 clock = create_clock(n_hour_marks, turtle_shape_size, pen_color, background_color, hour_hand_size, hour_mark_heading)
-colored_mark = start_counting_orb(clock, starting_mark, 12, pen_color, fill_color, delete_color, 1, 1, 0.3)
-colored_mark = start_counting_orb(clock, colored_mark, 12, pen_color, fill_color, delete_color, 1, 1, 0.3, False)
-colored_mark = start_counting_orb(clock, colored_mark, 12, pen_color, fill_color, delete_color, 1, 1, 0.3)
 
 
-# clock = create_clock(n_hour_marks, hour_hand_size, pen_color, fill_color, hour_mark_heading, turtle_shape_size)
-# colored_mark = start_counting_orb(clock, n_hour_marks, pen_color, fill_color, delete_color, 12, 1,1)
+# ----------------- train orbs
 
+### Less hacky solution
 
-# colored_mark = 12
-# for second in range(12):
-#     uncolored_mark = (colored_mark + 1) % n_hour_marks
-#     clock[uncolored_mark].color(pen_color, background_color)
-#     clock[colored_mark % n_hour_marks].color(pen_color, fill_color)
-#     colored_mark -= 1
-#     time.sleep(0.5)
+# PROBLEMS:
+# 1. Sequential vs. Simultaneous paining
+# 2. Transparency of fillcolor - train_colors = [(100, 144, 206, 1),(100, 144, 206, 0.75),(100, 144, 206, 0.5)]
 
+train_colors = ["red","white","green"]
+delete_backward_count = len(train_colors) + 1
+moving_flag_index = [0, 11, 10] # will find a more elegant solution
 
+for count in range(20):
+    if count == 0:
+        start_counting_orb(clock, moving_flag_index[0], 1, pen_color, train_colors[0], delete_color, 1, delete_backward_count, 0.1)
+        clock[moving_flag_index[0 % 12]].fillcolor(delete_color)
+    elif count == 1:
+        start_counting_orb(clock, moving_flag_index[0], 1, pen_color, train_colors[0], delete_color, 1, delete_backward_count, 0.1)
+        start_counting_orb(clock, moving_flag_index[1], 1, pen_color, train_colors[1], delete_color, 1, delete_backward_count, 0.1)
+        clock[moving_flag_index[1] % 12].fillcolor(delete_color)
+        clock[moving_flag_index[0] % 12].fillcolor(delete_color)
+    else:
+        start_counting_orb(clock, moving_flag_index[0], 1, pen_color, train_colors[0], delete_color, 1, delete_backward_count, 0.1)
+        start_counting_orb(clock, moving_flag_index[1], 1, pen_color, train_colors[1], delete_color, 1, delete_backward_count, 0.1)
+        start_counting_orb(clock, moving_flag_index[2], 1, pen_color, train_colors[2], delete_color, 1, delete_backward_count, 0.1)
+        clock[moving_flag_index[2] % 12].fillcolor(delete_color)
+        clock[moving_flag_index[1] % 12].fillcolor(delete_color)
+        clock[moving_flag_index[0] % 12].fillcolor(delete_color)
 
+    moving_flag_index[0] += 1
+    moving_flag_index[1] += 1
+    moving_flag_index[2] += 1
     
 
 canvas.mainloop()

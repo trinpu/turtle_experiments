@@ -85,20 +85,21 @@ clock = create_clock(n_hour_marks, turtle_shape_size, pen_color, background_colo
 train_colors = ["red","white","green"]
 delete_backward_count = len(train_colors) + 1
 moving_flag_index = [0, 11, 10] # will find a more elegant solution
+time_lag = 0.1
 
 for count in range(20):
     if count == 0:
-        start_counting_orb(clock, moving_flag_index[0], 1, pen_color, train_colors[0], delete_color, 1, delete_backward_count, 0.1)
+        start_counting_orb(clock, moving_flag_index[0], 1, pen_color, train_colors[0], delete_color, 1, delete_backward_count, time_lag)
         clock[moving_flag_index[0 % 12]].fillcolor(delete_color)
     elif count == 1:
-        start_counting_orb(clock, moving_flag_index[0], 1, pen_color, train_colors[0], delete_color, 1, delete_backward_count, 0.1)
-        start_counting_orb(clock, moving_flag_index[1], 1, pen_color, train_colors[1], delete_color, 1, delete_backward_count, 0.1)
+        start_counting_orb(clock, moving_flag_index[0], 1, pen_color, train_colors[0], delete_color, 1, delete_backward_count, time_lag)
+        start_counting_orb(clock, moving_flag_index[1], 1, pen_color, train_colors[1], delete_color, 1, delete_backward_count, time_lag)
         clock[moving_flag_index[1] % 12].fillcolor(delete_color)
         clock[moving_flag_index[0] % 12].fillcolor(delete_color)
     else:
-        start_counting_orb(clock, moving_flag_index[0], 1, pen_color, train_colors[0], delete_color, 1, delete_backward_count, 0.1)
-        start_counting_orb(clock, moving_flag_index[1], 1, pen_color, train_colors[1], delete_color, 1, delete_backward_count, 0.1)
-        start_counting_orb(clock, moving_flag_index[2], 1, pen_color, train_colors[2], delete_color, 1, delete_backward_count, 0.1)
+        start_counting_orb(clock, moving_flag_index[0], 1, pen_color, train_colors[0], delete_color, 1, delete_backward_count, time_lag)
+        start_counting_orb(clock, moving_flag_index[1], 1, pen_color, train_colors[1], delete_color, 1, delete_backward_count, time_lag)
+        start_counting_orb(clock, moving_flag_index[2], 1, pen_color, train_colors[2], delete_color, 1, delete_backward_count, time_lag)
 
         # this delete behavour is so fast that it seems simultaneous!
         # same logic could be applied to coloring behvavour

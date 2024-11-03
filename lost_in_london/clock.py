@@ -42,7 +42,7 @@ def start_counting_orb(clock, starting_mark, n_counts, pen_color, fill_color, de
 
         time.sleep(0.5)
     
-    return deleted_mark_index
+    return deleted_mark_index 
 
 
 background_color = "#090c1f"

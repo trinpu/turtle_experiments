@@ -22,11 +22,11 @@ def create_clock(n_hour_marks, turtle_shape_size, pen_color, fill_color, hour_ha
     return hour_marks
 
 
-def start_counting_orb(clock, starting_mark, n_counts, pen_color, fill_color, delete_color, jump_forward_count, delete_backward_count, cloclwise=True):
+def start_counting_orb(clock, starting_mark, n_counts, pen_color, fill_color, delete_color, jump_forward_count, delete_backward_count, time_lag, clockwise=True):
     colored_mark_index = starting_mark
     for second in range(n_counts):
         # delete logic
-        if cloclwise:
+        if clockwise:
             deleted_mark_index = (colored_mark_index - delete_backward_count) % n_hour_marks
         else:
             deleted_mark_index = (colored_mark_index + delete_backward_count) % n_hour_marks
@@ -35,21 +35,24 @@ def start_counting_orb(clock, starting_mark, n_counts, pen_color, fill_color, de
 
         # color logic
         clock[colored_mark_index % n_hour_marks].color(pen_color, fill_color)
-        if cloclwise:
+        if clockwise:
             colored_mark_index += jump_forward_count
         else:   
             colored_mark_index -= jump_forward_count
 
         time.sleep(0.5)
     
-    return deleted_mark_index 
+    if clockwise:
+        return colored_mark_index - 1
+    else:
+        return colored_mark_index + 1
+
 
 
 background_color = "#090c1f"
 delete_color = background_color
 pen_color = "#BFEDFF"
 fill_color = "#6490CE"
-fill_colors = []
 
 canvas = turtle.Screen()
 canvas.bgcolor(background_color)
@@ -59,7 +62,13 @@ hour_hand_size = 200
 hour_mark_heading = 90
 turtle_shape_size = 1
 
+starting_mark = 12
+
 clock = create_clock(n_hour_marks, turtle_shape_size, pen_color, background_color, hour_hand_size, hour_mark_heading)
+colored_mark = start_counting_orb(clock, starting_mark, 12, pen_color, fill_color, delete_color, 1, 1, 0.3)
+colored_mark = start_counting_orb(clock, colored_mark, 12, pen_color, fill_color, delete_color, 1, 1, 0.3, False)
+colored_mark = start_counting_orb(clock, colored_mark, 12, pen_color, fill_color, delete_color, 1, 1, 0.3)
+
 
 # clock = create_clock(n_hour_marks, hour_hand_size, pen_color, fill_color, hour_mark_heading, turtle_shape_size)
 # colored_mark = start_counting_orb(clock, n_hour_marks, pen_color, fill_color, delete_color, 12, 1,1)

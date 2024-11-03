@@ -40,7 +40,7 @@ def start_counting_orb(clock, starting_mark, n_counts, pen_color, fill_color, de
         else:   
             colored_mark_index -= jump_forward_count
 
-        time.sleep(0.5)
+        time.sleep(time_lag)
     
     if clockwise:
         return colored_mark_index - 1
@@ -99,6 +99,9 @@ for count in range(20):
         start_counting_orb(clock, moving_flag_index[0], 1, pen_color, train_colors[0], delete_color, 1, delete_backward_count, 0.1)
         start_counting_orb(clock, moving_flag_index[1], 1, pen_color, train_colors[1], delete_color, 1, delete_backward_count, 0.1)
         start_counting_orb(clock, moving_flag_index[2], 1, pen_color, train_colors[2], delete_color, 1, delete_backward_count, 0.1)
+
+        # this delete behavour is so fast that it seems simultaneous!
+        # same logic could be applied to coloring behvavour
         clock[moving_flag_index[2] % 12].fillcolor(delete_color)
         clock[moving_flag_index[1] % 12].fillcolor(delete_color)
         clock[moving_flag_index[0] % 12].fillcolor(delete_color)

@@ -14,7 +14,7 @@ def create_clock(n_hour_marks, turtle_min_shape_size, turtle_max_shape_size, pen
         turtle_shape_size = randint(turtle_min_shape_size, turtle_max_shape_size)
 
         a_turtle = turtle.Turtle()
-        a_turtle.speed(6)
+        a_turtle.speed(8)
         a_turtle.shape('circle')
         a_turtle.setheading(hour_mark_heading)
         a_turtle.shapesize(turtle_shape_size)
@@ -31,12 +31,12 @@ def start_counting_orb(clock, starting_mark, n_counts, pen_color, fill_color, de
     colored_mark_index = starting_mark
     for second in range(n_counts):
         # delete logic
-        if clockwise:
-            deleted_mark_index = (colored_mark_index - delete_backward_count) % n_hour_marks
-        else:
-            deleted_mark_index = (colored_mark_index + delete_backward_count) % n_hour_marks
+        # if clockwise:
+        #     deleted_mark_index = (colored_mark_index - delete_backward_count) % n_hour_marks
+        # else:
+        #     deleted_mark_index = (colored_mark_index + delete_backward_count) % n_hour_marks
 
-        clock[deleted_mark_index].color(pen_color, delete_color)
+        # clock[deleted_mark_index].color(pen_color, delete_color)
 
         # color logic
         clock[colored_mark_index % n_hour_marks].color(pen_color, fill_color)
@@ -60,7 +60,59 @@ def bouncing_clock():
     colored_mark = start_counting_orb(clock, colored_mark, 12, pen_color, fill_color, delete_color, 1, 1, 0.3)
 
 
+def walking_orbs(clock, orbs_colors, n_steps, step_forward, pulse_duration, coloring_lag=0, continuous=True):
+    """Create three obs one by one. Orbs walk forward by 1 step lasting n seconds (pulse duration)"""
 
+    # For this version I assume that the orb_colors < n_hour_marks
+    n_hour_marks = len(clock)
+    if len(orbs_colors) > n_hour_marks:
+        return "too many colors"
+
+    # orbs settings
+    tail_indexes = [n_hour_marks - x for x in range(1, len(orbs_colors))]
+    moving_flag_index = [0]
+    moving_flag_index.extend(tail_indexes)
+
+    # walking settings
+    orbs_created = 0
+    orbs_creation_cutoff = len(orbs_colors) - 1
+
+    # walking behaviour
+    for count in range(n_steps):
+
+        if count < orbs_creation_cutoff:
+            orbs_created += 1
+        else:
+            orbs_created = len(orbs_colors)
+
+        delete_backward_count = orbs_created + 1
+        # create orbs
+        for orb in range(orbs_created):
+            start_counting_orb(clock, moving_flag_index[orb], 1, pen_color, orbs_colors[orb], delete_color, step_forward, delete_backward_count, coloring_lag)
+        
+        # pause
+        time.sleep(pulse_duration)
+
+        # delete created orbs
+        if continuous != True:
+            for orb in range(n_hour_marks):
+                clock[orb].fillcolor(delete_color)
+        
+        # update orb index
+        for orb in range(len(orbs_colors)):
+            moving_flag_index[orb] += 1
+    
+    return 1
+
+
+
+# --- MAIN SCRIPT BEHAVIOUR (Could be placed on a separate file)
+
+# note: with time_lag at 0, I create the stepping flag behaviour I wanted
+# next feature: draw ("scia"), it could be approached as:
+# - a longer train with more colors and transparency, max # colors < # hour marks
+
+# setting colors of background and orbs
 background_color = "#090c1f"
 delete_color = background_color
 pen_color = "#BFEDFF"
@@ -69,66 +121,31 @@ fill_color = "#6490CE"
 canvas = turtle.Screen()
 canvas.bgcolor(background_color)
 
-n_hour_marks = 12 # doesn't support more number, must abstract this
+# defining clock and hour mark sizing
+n_hour_marks = 24
 hour_mark_heading = 90
 
 hour_hand_size_min = 100
-hour_hand_size_max = hour_hand_size_min
+hour_hand_size_max = hour_hand_size_min + 300
 
 turtle_min_shape_size = 2
-turtle_max_shape_size = turtle_min_shape_size
+turtle_max_shape_size = turtle_min_shape_size + 3
 
 starting_mark = 12
 
 clock = create_clock(n_hour_marks, turtle_min_shape_size, turtle_max_shape_size, pen_color, background_color, hour_hand_size_min, hour_hand_size_max, hour_mark_heading)
 
-
-# ----------------- train orbs
-
-# note: with time_lag at 0, I create the stepping flag behaviour I wanted
-# next feature: draw ("scia"), it could be approached as:
-# - a longer train with more colors and transparency, max # colors < # hour marks
-
-
-
-def walking_orbs(orbs_colors, n_steps):
-    """Create three obs one by one. Orbs walk forward by 1 step lasting n seconds (pulse duration)"""
-    delete_backward_count = len(orbs_colors) + 1
-
-    starting_index = n_hour_marks % n_hour_marks # staring from 0
-    moving_flag_index = [starting_index, n_hour_marks - 1, n_hour_marks - 2]
-    time_lag = 0 # rename to coloring_lag
-    pulse_duration = 1 # rename to pulse_duration
-
-    for count in range(n_steps):
-        if count == 0:
-            start_counting_orb(clock, moving_flag_index[0], 1, pen_color, orbs_colors[0], delete_color, 1, delete_backward_count, time_lag)
-            time.sleep(pulse_duration)
-            clock[moving_flag_index[0 % n_hour_marks]].fillcolor(delete_color) # remove the 12 to support more hour hands
-        elif count == 1:
-            start_counting_orb(clock, moving_flag_index[1], 1, pen_color, orbs_colors[1], delete_color, 1, delete_backward_count, time_lag)
-            start_counting_orb(clock, moving_flag_index[0], 1, pen_color, orbs_colors[0], delete_color, 1, delete_backward_count, time_lag)
-            time.sleep(pulse_duration)
-            clock[moving_flag_index[0] % n_hour_marks].fillcolor(delete_color)
-            clock[moving_flag_index[1] % n_hour_marks].fillcolor(delete_color)
-        else:
-            start_counting_orb(clock, moving_flag_index[0], 1, pen_color, orbs_colors[0], delete_color, 1, delete_backward_count, time_lag)
-            start_counting_orb(clock, moving_flag_index[1], 1, pen_color, orbs_colors[1], delete_color, 1, delete_backward_count, time_lag)
-            start_counting_orb(clock, moving_flag_index[2], 1, pen_color, orbs_colors[2], delete_color, 1, delete_backward_count, time_lag)
-
-            # this delete behavour is so fast that it seems simultaneous!
-            # same logic could be applied to coloring behvavour
-            time.sleep(pulse_duration)
-            clock[moving_flag_index[2] % n_hour_marks].fillcolor(delete_color)
-            clock[moving_flag_index[1] % n_hour_marks].fillcolor(delete_color)
-            clock[moving_flag_index[0] % n_hour_marks].fillcolor(delete_color)
-
-        moving_flag_index[0] += 1
-        moving_flag_index[1] += 1
-        moving_flag_index[2] += 1
-
+# defining walking behaviour
+step_forward = 1
+orbs_colors = ["red"]
 orbs_colors = ["red","white","green"]
-walking_orbs(orbs_colors, 20)    
+orbs_colors = ["yellow", "white", "#faf6eb", "#efe5c2", "#e5d39a", "#dac271","#d0b049", "#b6972f", "#8e7525", "#65541a","#3d3210","#141105"]
+n_steps = len(orbs_colors) * 3
+pulse_duration = 1
+time_lag = 0
+
+assert walking_orbs(clock, range(30), n_steps, step_forward, pulse_duration, time_lag, continuous=False) == "too many colors"
+assert walking_orbs(clock, orbs_colors, n_steps, step_forward, pulse_duration, time_lag, continuous=True) == 1    
 
 canvas.mainloop()
 

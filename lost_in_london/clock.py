@@ -69,8 +69,8 @@ fill_color = "#6490CE"
 canvas = turtle.Screen()
 canvas.bgcolor(background_color)
 
-n_hour_marks = 12 # doesn't support more number, must abstract this
-hour_hand_size_max = 400
+n_hour_marks = 24 # doesn't support more number, must abstract this
+hour_hand_size_max = 100
 hour_hand_size_min = 100
 hour_mark_heading = 90
 turtle_max_shape_size = 2
@@ -98,13 +98,13 @@ for count in range(20):
     if count == 0:
         start_counting_orb(clock, moving_flag_index[0], 1, pen_color, train_colors[0], delete_color, 1, delete_backward_count, time_lag)
         time.sleep(delete_lag)
-        clock[moving_flag_index[0 % 12]].fillcolor(delete_color) # remove the 12 to support more hour hands
+        clock[moving_flag_index[0 % n_hour_marks]].fillcolor(delete_color) # remove the 12 to support more hour hands
     elif count == 1:
         start_counting_orb(clock, moving_flag_index[1], 1, pen_color, train_colors[1], delete_color, 1, delete_backward_count, time_lag)
         start_counting_orb(clock, moving_flag_index[0], 1, pen_color, train_colors[0], delete_color, 1, delete_backward_count, time_lag)
         time.sleep(delete_lag)
-        clock[moving_flag_index[0] % 12].fillcolor(delete_color)
-        clock[moving_flag_index[1] % 12].fillcolor(delete_color)
+        clock[moving_flag_index[0] % n_hour_marks].fillcolor(delete_color)
+        clock[moving_flag_index[1] % n_hour_marks].fillcolor(delete_color)
     else:
         start_counting_orb(clock, moving_flag_index[0], 1, pen_color, train_colors[0], delete_color, 1, delete_backward_count, time_lag)
         start_counting_orb(clock, moving_flag_index[1], 1, pen_color, train_colors[1], delete_color, 1, delete_backward_count, time_lag)
@@ -113,9 +113,9 @@ for count in range(20):
         # this delete behavour is so fast that it seems simultaneous!
         # same logic could be applied to coloring behvavour
         time.sleep(delete_lag)
-        clock[moving_flag_index[2] % 12].fillcolor(delete_color)
-        clock[moving_flag_index[1] % 12].fillcolor(delete_color)
-        clock[moving_flag_index[0] % 12].fillcolor(delete_color)
+        clock[moving_flag_index[2] % n_hour_marks].fillcolor(delete_color)
+        clock[moving_flag_index[1] % n_hour_marks].fillcolor(delete_color)
+        clock[moving_flag_index[0] % n_hour_marks].fillcolor(delete_color)
 
     moving_flag_index[0] += 1
     moving_flag_index[1] += 1

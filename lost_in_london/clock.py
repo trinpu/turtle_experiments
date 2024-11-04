@@ -2,7 +2,7 @@ import turtle
 import time
 from random import randint
 
-def create_clock(n_hour_marks, turtle_max_shape_size, pen_color, fill_color, hour_hand_size_min, hour_hand_size_max, hour_mark_heading):
+def create_clock(n_hour_marks, turtle_min_shape_size, turtle_max_shape_size, pen_color, fill_color, hour_hand_size_min, hour_hand_size_max, hour_mark_heading):
     """Creates a clock of hour marks, return a list with clock wise turtles positioned as the hour marks"""
 
     hour_mark_angle = 360 / n_hour_marks
@@ -11,7 +11,7 @@ def create_clock(n_hour_marks, turtle_max_shape_size, pen_color, fill_color, hou
     for mark in range(n_hour_marks):
 
         hour_hand_size = randint(hour_hand_size_min, hour_hand_size_max)
-        turtle_shape_size = randint(1, turtle_max_shape_size)
+        turtle_shape_size = randint(turtle_min_shape_size, turtle_max_shape_size)
 
         a_turtle = turtle.Turtle()
         a_turtle.speed(6)
@@ -70,14 +70,17 @@ canvas = turtle.Screen()
 canvas.bgcolor(background_color)
 
 n_hour_marks = 24 # doesn't support more number, must abstract this
-hour_hand_size_min = 100
-hour_hand_size_max = hour_hand_size_min
 hour_mark_heading = 90
-turtle_max_shape_size = 2
+
+hour_hand_size_min = 100
+hour_hand_size_max = 400
+
+turtle_min_shape_size = 3
+turtle_max_shape_size = turtle_min_shape_size + 5
 
 starting_mark = 12
 
-clock = create_clock(n_hour_marks, turtle_max_shape_size, pen_color, background_color, hour_hand_size_min, hour_hand_size_max, hour_mark_heading)
+clock = create_clock(n_hour_marks, turtle_min_shape_size, turtle_max_shape_size, pen_color, background_color, hour_hand_size_min, hour_hand_size_max, hour_mark_heading)
 
 
 # ----------------- train orbs

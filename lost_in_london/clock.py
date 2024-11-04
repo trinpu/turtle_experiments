@@ -69,14 +69,14 @@ fill_color = "#6490CE"
 canvas = turtle.Screen()
 canvas.bgcolor(background_color)
 
-n_hour_marks = 24 # doesn't support more number, must abstract this
+n_hour_marks = 12 # doesn't support more number, must abstract this
 hour_mark_heading = 90
 
 hour_hand_size_min = 100
-hour_hand_size_max = 400
+hour_hand_size_max = hour_hand_size_min
 
-turtle_min_shape_size = 3
-turtle_max_shape_size = turtle_min_shape_size + 5
+turtle_min_shape_size = 2
+turtle_max_shape_size = turtle_min_shape_size
 
 starting_mark = 12
 
@@ -89,42 +89,46 @@ clock = create_clock(n_hour_marks, turtle_min_shape_size, turtle_max_shape_size,
 # next feature: draw ("scia"), it could be approached as:
 # - a longer train with more colors and transparency, max # colors < # hour marks
 
-train_colors = ["red","white","green"]
-delete_backward_count = len(train_colors) + 1
 
-starting_index = n_hour_marks % n_hour_marks # staring from 0
-moving_flag_index = [starting_index, n_hour_marks - 1, n_hour_marks - 2]
-time_lag = 0 # controls spreading behaviour
-delete_lag = 0.2
 
-for count in range(20):
-    if count == 0:
-        start_counting_orb(clock, moving_flag_index[0], 1, pen_color, train_colors[0], delete_color, 1, delete_backward_count, time_lag)
-        time.sleep(delete_lag)
-        clock[moving_flag_index[0 % n_hour_marks]].fillcolor(delete_color) # remove the 12 to support more hour hands
-    elif count == 1:
-        start_counting_orb(clock, moving_flag_index[1], 1, pen_color, train_colors[1], delete_color, 1, delete_backward_count, time_lag)
-        start_counting_orb(clock, moving_flag_index[0], 1, pen_color, train_colors[0], delete_color, 1, delete_backward_count, time_lag)
-        time.sleep(delete_lag)
-        clock[moving_flag_index[0] % n_hour_marks].fillcolor(delete_color)
-        clock[moving_flag_index[1] % n_hour_marks].fillcolor(delete_color)
-    else:
-        start_counting_orb(clock, moving_flag_index[0], 1, pen_color, train_colors[0], delete_color, 1, delete_backward_count, time_lag)
-        start_counting_orb(clock, moving_flag_index[1], 1, pen_color, train_colors[1], delete_color, 1, delete_backward_count, time_lag)
-        start_counting_orb(clock, moving_flag_index[2], 1, pen_color, train_colors[2], delete_color, 1, delete_backward_count, time_lag)
+def walking_orbs(orbs_colors, n_steps):
+    """Create three obs one by one. Orbs walk forward by 1 step lasting n seconds (pulse duration)"""
+    delete_backward_count = len(orbs_colors) + 1
 
-        # this delete behavour is so fast that it seems simultaneous!
-        # same logic could be applied to coloring behvavour
-        time.sleep(delete_lag)
-        clock[moving_flag_index[2] % n_hour_marks].fillcolor(delete_color)
-        clock[moving_flag_index[1] % n_hour_marks].fillcolor(delete_color)
-        clock[moving_flag_index[0] % n_hour_marks].fillcolor(delete_color)
+    starting_index = n_hour_marks % n_hour_marks # staring from 0
+    moving_flag_index = [starting_index, n_hour_marks - 1, n_hour_marks - 2]
+    time_lag = 0 # rename to coloring_lag
+    pulse_duration = 1 # rename to pulse_duration
 
-    moving_flag_index[0] += 1
-    moving_flag_index[1] += 1
-    moving_flag_index[2] += 1
+    for count in range(n_steps):
+        if count == 0:
+            start_counting_orb(clock, moving_flag_index[0], 1, pen_color, orbs_colors[0], delete_color, 1, delete_backward_count, time_lag)
+            time.sleep(pulse_duration)
+            clock[moving_flag_index[0 % n_hour_marks]].fillcolor(delete_color) # remove the 12 to support more hour hands
+        elif count == 1:
+            start_counting_orb(clock, moving_flag_index[1], 1, pen_color, orbs_colors[1], delete_color, 1, delete_backward_count, time_lag)
+            start_counting_orb(clock, moving_flag_index[0], 1, pen_color, orbs_colors[0], delete_color, 1, delete_backward_count, time_lag)
+            time.sleep(pulse_duration)
+            clock[moving_flag_index[0] % n_hour_marks].fillcolor(delete_color)
+            clock[moving_flag_index[1] % n_hour_marks].fillcolor(delete_color)
+        else:
+            start_counting_orb(clock, moving_flag_index[0], 1, pen_color, orbs_colors[0], delete_color, 1, delete_backward_count, time_lag)
+            start_counting_orb(clock, moving_flag_index[1], 1, pen_color, orbs_colors[1], delete_color, 1, delete_backward_count, time_lag)
+            start_counting_orb(clock, moving_flag_index[2], 1, pen_color, orbs_colors[2], delete_color, 1, delete_backward_count, time_lag)
 
-    
+            # this delete behavour is so fast that it seems simultaneous!
+            # same logic could be applied to coloring behvavour
+            time.sleep(pulse_duration)
+            clock[moving_flag_index[2] % n_hour_marks].fillcolor(delete_color)
+            clock[moving_flag_index[1] % n_hour_marks].fillcolor(delete_color)
+            clock[moving_flag_index[0] % n_hour_marks].fillcolor(delete_color)
+
+        moving_flag_index[0] += 1
+        moving_flag_index[1] += 1
+        moving_flag_index[2] += 1
+
+orbs_colors = ["red","white","green"]
+walking_orbs(orbs_colors, 20)    
 
 canvas.mainloop()
 

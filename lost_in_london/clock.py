@@ -70,8 +70,8 @@ canvas = turtle.Screen()
 canvas.bgcolor(background_color)
 
 n_hour_marks = 24 # doesn't support more number, must abstract this
-hour_hand_size_max = 100
 hour_hand_size_min = 100
+hour_hand_size_max = hour_hand_size_min
 hour_mark_heading = 90
 turtle_max_shape_size = 2
 
@@ -82,15 +82,15 @@ clock = create_clock(n_hour_marks, turtle_max_shape_size, pen_color, background_
 
 # ----------------- train orbs
 
-### Less hacky solution
-
 # note: with time_lag at 0, I create the stepping flag behaviour I wanted
 # next feature: draw ("scia"), it could be approached as:
 # - a longer train with more colors and transparency, max # colors < # hour marks
 
 train_colors = ["red","white","green"]
 delete_backward_count = len(train_colors) + 1
-moving_flag_index = [0, 11, 10] # will find a more elegant solution
+
+starting_index = n_hour_marks % n_hour_marks # staring from 0
+moving_flag_index = [starting_index, n_hour_marks - 1, n_hour_marks - 2]
 time_lag = 0 # controls spreading behaviour
 delete_lag = 0.2
 

@@ -2,14 +2,17 @@ import turtle
 import time
 from random import randint
 
-def create_clock(n_hour_marks, turtle_shape_size, pen_color, fill_color, hour_hand_size_min, hour_hand_size_max, hour_mark_heading):
+def create_clock(n_hour_marks, turtle_max_shape_size, pen_color, fill_color, hour_hand_size_min, hour_hand_size_max, hour_mark_heading):
     """Creates a clock of hour marks, return a list with clock wise turtles positioned as the hour marks"""
 
     hour_mark_angle = 360 / n_hour_marks
     hour_marks = []
 
     for mark in range(n_hour_marks):
+
         hour_hand_size = randint(hour_hand_size_min, hour_hand_size_max)
+        turtle_shape_size = randint(1, turtle_max_shape_size)
+
         a_turtle = turtle.Turtle()
         a_turtle.speed(6)
         a_turtle.shape('circle')
@@ -66,15 +69,15 @@ fill_color = "#6490CE"
 canvas = turtle.Screen()
 canvas.bgcolor(background_color)
 
-n_hour_marks = 12
+n_hour_marks = 12 # doesn't support more number, must abstract this
 hour_hand_size_max = 400
 hour_hand_size_min = 100
 hour_mark_heading = 90
-turtle_shape_size = 1
+turtle_max_shape_size = 2
 
 starting_mark = 12
 
-clock = create_clock(n_hour_marks, turtle_shape_size, pen_color, background_color, hour_hand_size_min, hour_hand_size_max, hour_mark_heading)
+clock = create_clock(n_hour_marks, turtle_max_shape_size, pen_color, background_color, hour_hand_size_min, hour_hand_size_max, hour_mark_heading)
 
 
 # ----------------- train orbs
@@ -95,7 +98,7 @@ for count in range(20):
     if count == 0:
         start_counting_orb(clock, moving_flag_index[0], 1, pen_color, train_colors[0], delete_color, 1, delete_backward_count, time_lag)
         time.sleep(delete_lag)
-        clock[moving_flag_index[0 % 12]].fillcolor(delete_color)
+        clock[moving_flag_index[0 % 12]].fillcolor(delete_color) # remove the 12 to support more hour hands
     elif count == 1:
         start_counting_orb(clock, moving_flag_index[1], 1, pen_color, train_colors[1], delete_color, 1, delete_backward_count, time_lag)
         start_counting_orb(clock, moving_flag_index[0], 1, pen_color, train_colors[0], delete_color, 1, delete_backward_count, time_lag)

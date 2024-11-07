@@ -17,7 +17,7 @@ n_edges = 4 * 10
 
 def draw_shape(a_turtle, edge_size, angle,n_edges, is_rose=True):
     """Draws a random shape, similar to a star"""
-    for edge in range(4 * 10):
+    for edge in range(n_edges):
         a_turtle.forward(edge_size)
         a_turtle.left(angle)
 
